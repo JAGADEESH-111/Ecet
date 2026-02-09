@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
   <title>Daily Quiz</title>
   <style>
-  body{
-    background-color: silver;
-  }
+    body {
+      font-family: Arial;
+      padding: 20px;
+    }
     button {
-      margin: 5px 0;
-      padding: 8px 12px;
-      cursor: pointer;
+      display: block;
+      margin: 8px 0;
+      padding: 10px;
+      width: 200px;
     }
   </style>
 </head>
@@ -17,37 +20,29 @@
 <body>
 
 <h3>Time Left: <span id="timer">20:00</span></h3>
-
-<h2 id="question"></h2>
+<h2 id="question">Loading...</h2>
 <div id="options"></div>
-
 <button id="nextBtn">Next</button>
 
 <script>
-  // ⏱ TIMER
+  // TIMER
   let timeLeft = 20 * 60;
   let timerInterval;
 
-  window.startTimer = function startTimer() {
+  function startTimer() {
     timerInterval = setInterval(() => {
-      let minutes = Math.floor(timeLeft / 60);
-      let seconds = timeLeft % 60;
-
+      let m = Math.floor(timeLeft / 60);
+      let s = timeLeft % 60;
       document.getElementById("timer").innerText =
-        `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-
+        `${m}:${s < 10 ? "0" : ""}${s}`;
       timeLeft--;
-
-      if (timeLeft < 0) {
-        clearInterval(timerInterval);
-        finishQuiz();
-      }
+      if (timeLeft < 0) finishQuiz();
     }, 1000);
   }
 </script>
 
 <script type="module">
-  // 🔥 FIREBASE
+  // FIREBASE
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
   import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
@@ -60,7 +55,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // ✅ LOCAL DATE (NO UTC BUG)
+  // TODAY (LOCAL)
   const d = new Date();
   const today =
     d.getFullYear() + "-" +
@@ -72,100 +67,73 @@
   let score = 0;
   let answered = false;
 
-  // 🔒 PREVENT REATTEMPT
- /* if (localStorage.getItem("quizDone_" + today)) {
-    document.body.innerHTML = "<h2>You already attempted today’s quiz</h2>";
-    throw new Error("STOP");
-  }*/
-
   async function loadQuiz() {
     const ref = doc(db, "dailyQuiz", today);
     const snap = await getDoc(ref);
 
     if (!snap.exists()) {
-      document.body.innerHTML = "<h2>No quiz for today</h2>";
+      document.getElementById("question").innerText =
+        "No quiz for today";
       return;
     }
 
-    // ✅ HANDLE MAP OR ARRAY
-    const rawQuestions = snap.data().questions;
-    questions = Array.isArray(rawQuestions)
-      ? rawQuestions
-      : Object.values(rawQuestions);
+    questions = snap.data().questions;
 
-    if (questions.length === 0) {
-      document.body.innerHTML = "<h2>No questions found</h2>";
+    if (!questions || questions.length === 0) {
+      document.getElementById("question").innerText =
+        "No questions found";
       return;
     }
 
-    showQuestion();
     startTimer();
+    showQuestion();
   }
 
   function showQuestion() {
-  answered = false;
-  const q = questions[index];
+    answered = false;
+    const q = questions[index];
 
-  document.getElementById("question").innerText =
-    `${index + 1}. ${q.question}`;
+    document.getElementById("question").innerText =
+      `${index + 1}. ${q.question}`;
 
-  const optionsDiv = document.getElementById("options");
-  optionsDiv.innerHTML = "";
+    const optDiv = document.getElementById("options");
+    optDiv.innerHTML = "";
 
-  const optionsArray = Array.isArray(q.options)
-    ? q.options
-    : Object.values(q.options);
-
-  optionsArray.forEach(opt => {
-    const btn = document.createElement("button");
-    btn.innerText = opt;
-
-    btn.onclick = () => {
-      if (answered) return;
-      answered = true;
-
-      if (opt === q.answer) {
-        score++;
-        btn.style.background = "#4caf50";
-      } else {
-        btn.style.background = "#f44336";
-      }
-    };
-
-    optionsDiv.appendChild(btn);
-    optionsDiv.appendChild(document.createElement("br"));
-  });
-}
+    q.options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.innerText = opt;
+      btn.onclick = () => {
+        if (answered) return;
+        answered = true;
+        if (opt === q.answer) {
+          score++;
+          btn.style.background = "lightgreen";
+        } else {
+          btn.style.background = "#f44336";
+        }
+      };
+      optDiv.appendChild(btn);
+    });
+  }
 
   document.getElementById("nextBtn").onclick = () => {
     if (!answered) {
-      alert("Select an answer first");
+      alert("Select an answer");
       return;
     }
-
     index++;
-
-    if (index < questions.length) {
-      showQuestion();
-    } else {
-      finishQuiz();
-    }
+    if (index < questions.length) showQuestion();
+    else finishQuiz();
   };
 
- window.finishQuiz = function finishQuiz() {
+  function finishQuiz() {
     clearInterval(timerInterval);
-    localStorage.setItem("quizDone_" + today, "true");
-
-    const percent = Math.round((score / questions.length) * 100);
-
     document.body.innerHTML = `
-      <h2>Quiz Completed ✅</h2>
+      <h2>Quiz Finished ✅</h2>
       <p>Score: ${score}/${questions.length}</p>
-      <p>Percentage: ${percent}%</p>
     `;
   }
 
-  // 🚀 START
   loadQuiz();
 </script>
 
