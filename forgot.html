@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ECET Sign Up</title>
+   <style>
+     body{
+       margin:0;
+       padding:0;
+       font-family: Arial, sans-serif;
+       background: #f2f6ff;
+       display: flex;
+       justify-content: center;
+      align-items: center;
+       height: 100vh;
+     }
+     .login{
+       background: white;
+       padding: 30px;
+       width:350px;
+       text-align:center;
+       border-radius: 10px;
+       box-shadow:0px 4px 10px rgba(0,0,0,0.1)
+     }
+
+  
+  
+  .login input{
+    width: 100%;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+     
+  .login button{
+    width:100%;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #2a4cff;
+    color: white;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  login-container button:hover {
+    background: #1f3ad8;
+}
+
+.signup-text {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.signup a {
+    color: #2a4cff;
+    text-decoration: none;
+
+  
+}
+
+.a {
+  position: relative;
+  width: 100%;
+}
+
+.a input {
+  width: 100%;
+  padding: 10px 10px 10px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.a button {
+  width: 60px;
+  position: absolute;
+  top: 50%;
+  right: 5px;
+  transform: translateY(-50%);
+  padding: 8px ;
+  font-size: 12px;
+  border-radius: 4px;
+  background-color: #2a4cff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+
+   </style>
+</head>
+<body>
+
+<div class="login">
+    
+    
+
+    <form>
+        <div class="a">
+        <input type="email" id="email" placeholder="Email" required> 
+        
+        <button type="button" onclick="resetPassword()">send</button></div>
+        <p style="color:#2a4cff;"><small>Reset Password is sent to  gmail</small></p>
+        
+      
+        
+    </form>
+
+    <p class="signup">
+        Password <a href="Ecet.html">Login?</a>
+        </p>
+        
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAzDiUTgErSBLG8I_uIZEFo-tPJ4Z-R_Vo",
+  authDomain: "ecet-5650a.firebaseapp.com",
+  projectId: "ecet-5650a",
+  storageBucket: "ecet-5650a.firebasestorage.app",
+  messagingSenderId: "973574372702",
+  appId: "1:973574372702:web:6918419988ac182b2d63cf"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.resetPassword = function () {
+  const email = document.getElementById("email").value;
+
+  sendPasswordResetEmail(auth,email)
+    .then(() => alert("Reset Password sent to Gmail"))
+    .catch(err => alert(err.message));
+};
+</script>
+
+
+</body>
+</html>

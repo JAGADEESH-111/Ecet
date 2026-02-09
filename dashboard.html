@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ECET Dashboard</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f2f6ff;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    
+    }
+    .card button {
+      background: #2a4cff;
+      color: white;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+  <script>
+    function Previous(){
+      window.location.href="Previous.html"
+    }
+    function quiz(){
+      window.location.href="quiz.html"
+    }
+  </script>
+</head>
+<body>
+
+<h2>Welcome to ECET Practice</h2>
+
+<div class="card">
+  <h3>ECET Previous Papers</h3>
+  <button type="button" onclick="Previous()">PREVIOUS PAPERS</button>
+</div>
+
+<div class="card">
+  <h3>Daily Quiz</h3>
+  <button type="button" onclick="quiz()">Start Quiz</button>
+</div>
+
+<div class="card">
+  <h3>Mock Test</h3>
+  <button type="button" onclick="">Take Test</button>
+</div>
+<script type="module">
+  
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAzDiUTgErSBLG8I_uIZEFo-tPJ4Z-R_Vo",
+  authDomain: "ecet-5650a.firebaseapp.com",
+  projectId: "ecet-5650a",
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "Ecet.html";
+  }
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<hrml>
+  <head>
+    <title>previous pappers </title>
+   <style>
+     body{
+       margin: 0;
+       text-align: center;
+       
+     }
+     button{
+  
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  font-size: 16px;
+  background-color: silver;
+  color: #2a4cff;
+  cursor: pointer;
+}
+
+     }
+     
+   </style>
+    </head>
+    
+    <body>
+      
+    <h2>Select Branch:</h2>
+<button onclick="showYears('CSE')">CSE</button><br>
+<button onclick="showYears('ECE')">ECE</button><br>
+<button onclick="showYears('EEE')">EEE</button><br>
+<button onclick="showYears('civil')">CIVIL</button><br>
+<button onclick="showYears('MECH')">MECH</button><br>
+
+
+<div id="yearsBox" style="display:none;">
+  <h3 id="yearTitle"></h3>
+
+  <button onclick="selectYear(2023)">2023</button>
+  <button onclick="selectYear(2022)">2022</button>
+  <button onclick="selectYear(2021)">2021</button>
+  <button onclick="selectYear(2020)">2020</button>
+</div>
+
+
+<script>
+function goBranch(branch) {
+  localStorage.setItem("branch", branch);
+  window.location.href = "years.html";
+}
+
+
+let selectedBranch = "";
+
+function showYears(branch) {
+  selectedBranch = branch;
+  document.getElementById("yearsBox").style.display = "block";
+  document.getElementById("yearTitle").innerText =
+    "Select Year - " + branch;
+}
+
+function selectYear(year) {
+  window.open(`papers/${selectedBranch}/${year}.pdf`, "_blank");
+}
+
+
+
+</script>
+</body>
+</html>

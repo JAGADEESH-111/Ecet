@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ECET Login</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f2f6ff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.login-container {
+    background: white;
+    padding: 30px;
+    width: 320px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.login-container h1 {
+    color: #2a4cff;
+    margin-bottom: 10px;
+}
+
+.login-container p {
+    font-size: 14px;
+    color: #555;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background: #2a4cff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background: #1f3ad8;
+}
+
+.signup-text {
+    margin-top: 15px;
+    font-size: 13px;
+}
+
+.signup-text a {
+    color: #2a4cff;
+    text-decoration: none;
+}
+.a{
+  margin-top:10px;
+}
+
+    </style>
+    
+</head>
+<body>
+
+<div class="login-container">
+    <h1>ECET Practice</h1>
+    <p>Login to practice MCQ bits</p>
+
+    <form>
+        <input type="email" id="email" placeholder="Email" required>
+         <input type="password" id="password"placeholder="password" required>
+        <button type="button" onclick="loginUser()">Login</button>
+    </form>
+    <div class="a">
+    
+      <a href="forgot.html" >forgot Password</a>
+      </div>
+      
+    <p class="signup-text">
+        New student? <a href="signup.html">Sign up</a>
+    </p>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAzDiUTgErSBLG8I_uIZEFo-tPJ4Z-R_Vo",
+  authDomain: "ecet-5650a.firebaseapp.com",
+  projectId: "ecet-5650a",
+  storageBucket: "ecet-5650a.firebasestorage.app",
+  messagingSenderId: "973574372702",
+  appId: "1:973574372702:web:6918419988ac182b2d63cf"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.loginUser = function () {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => alert("Login successful"))
+    .catch(err => {
+  if (err.code === "auth/invalid-login-credentials") {
+    alert("Wrong email or password");
+  } else {
+    alert(err.message);
+  }
+});
+
+};
+
+window.loginUser = function () {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  signInWithEmailAndPassword(auth, email, password)
+    .then(() => {
+      window.location.href = "dashboard.html";
+    })
+    .catch(err => alert(err.message));
+};
+
+</script>
+
+</body>
+</html>
