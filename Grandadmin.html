@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload Questions</title>
+</head>
+<body>
+
+<h2>Uploading Questions to Firestore...</h2>
+
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAzDiUTgErSBLG8I_uIZEFo-tPJ4Z-R_Vo",
+  authDomain: "ecet-5650a.firebaseapp.com",
+  projectId: "ecet-5650a"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+const questionsData = [
+  {
+    question: "What is 2 + 2?",
+    options: ["1", "2", "4", "5"],
+    answer: 2
+  },
+  {
+    question: "Capital of India?",
+    options: ["Mumbai", "Delhi", "Chennai", "Kolkata"],
+    answer: 1
+  },
+  {
+    question: "HTML stands for?",
+    options: [
+      "Hyper Text Markup Language",
+      "High Text Machine Language",
+      "Hyper Tool Multi Language",
+      "None"
+    ],
+    answer: 0
+  },
+  {
+    question: "Which is JavaScript framework?",
+    options: ["React", "Laravel", "Django", "Flask"],
+    answer: 0
+  }
+];
+
+// 
+async function uploadQuestions() {
+  try {
+
+    await setDoc(doc(db, "grandTests", "test1"), {
+      questions: questionsData
+    });
+
+    document.body.innerHTML = "<h2>Questions Uploaded Successfully!</h2>";
+
+  } catch (error) {
+    console.error(error);
+    document.body.innerHTML = "<h2>Error Uploading Questions</h2>";
+  }
+}
+
+uploadQuestions();
+
+</script>
+
+</body>
+</html>
